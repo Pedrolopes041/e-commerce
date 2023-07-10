@@ -9,6 +9,10 @@ export const HeaderContainer = styled.div`
   justify-content: space-between;
   padding: 20px;
   color: ${Colors.text.white};
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const HeaderTitle = styled.h2`
@@ -32,9 +36,5 @@ export const HeaderItem = styled.div`
   &:nth-child(2),
   &:nth-child(3) {
     margin-right: 40px;
-  }
-
-  &:hover {
-    cursor: pointer;
   }
 `;

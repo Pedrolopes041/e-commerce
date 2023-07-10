@@ -37,7 +37,7 @@ const LoginPage = () => {
 
           <LoginInputContainer>
             <p>Senha</p>
-            <CustomInput placeholder="Digite sua senha" />
+            <CustomInput placeholder="Digite sua senha" type="password"/>
           </LoginInputContainer>
 
           <CustomButton startIcon={<FiLogIn size={18} />}>Entrar</CustomButton>
