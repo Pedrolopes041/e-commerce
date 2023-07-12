@@ -12,34 +12,42 @@ import { FiLogIn } from "react-icons/fi";
 import { useForm } from 'react-hook-form';
 
 const SignUpPage = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
 
-  const {register, handleSubmit, formState: {errors}} = useForm();
+  const watchPassword = watch("password");
 
-  const handleSubimitPress = (data: any) => {
-    console.log({data});
-  }
+  const handleSubmitPress = (data: any) => {
+    console.log({ data });
+  };
 
   return (
     <>
       <Header />
+
       <SignUpContainer>
         <SignUpContent>
-          <SignUpHeadline>Crie a sua Conta</SignUpHeadline>
+          <SignUpHeadline>Crie sua conta</SignUpHeadline>
+
           <SignUpInputContainer>
             <p>Nome</p>
             <CustomInput
-              hasError={!!errors?.nome}
+              hasError={!!errors?.name}
               placeholder="Digite seu nome"
-              {...register("nome", { required: true })}
+              {...register("name", { required: true })}
             />
           </SignUpInputContainer>
 
           <SignUpInputContainer>
             <p>Sobrenome</p>
             <CustomInput
-              hasError={!!errors?.sobrenome}
-              placeholder="Digite seu Sobrenome"
-              {...register("sobrenome", { required: true })}
+              hasError={!!errors?.lastName}
+              placeholder="Digite seu sobrenome"
+              {...register("lastName", { required: true })}
             />
           </SignUpInputContainer>
 
@@ -47,37 +55,36 @@ const SignUpPage = () => {
             <p>E-mail</p>
             <CustomInput
               hasError={!!errors?.email}
-              placeholder="Digite seu E-mail"
-              {...register("email", { required: true })}
+              placeholder="Digite seu e-mail"
+              {...register("email", {
+                required: true})}
             />
           </SignUpInputContainer>
 
           <SignUpInputContainer>
             <p>Senha</p>
             <CustomInput
-              hasError={!!errors?.senha}
-              placeholder="Digite sua Senha"
+              hasError={!!errors?.password}
+              placeholder="Digite sua senha"
               type="password"
-              {...register("senha", { required: true })}
+              {...register("password", { required: true })}
             />
           </SignUpInputContainer>
 
           <SignUpInputContainer>
-            <p>Confirmar senha</p>
+            <p>Confirmação de Senha</p>
             <CustomInput
-              hasError={!!errors?.confirme}
-              placeholder="Confirme sua senha"
+              hasError={!!errors?.passwordConfirmation}
+              placeholder="Digite novamente sua senha"
               type="password"
-              {...register("confirme", { required: true })}
+              {...register("passwordConfirmation", {
+                required: true})}
             />
           </SignUpInputContainer>
+
           <CustomButton
-            startIcon={
-              <FiLogIn
-                size={18}
-                onClick={() => handleSubmit(handleSubimitPress)()}
-              />
-            }
+            onClick={() => handleSubmit(handleSubmitPress)()}
+            startIcon={<FiLogIn size={18} />}
           >
             Criar Conta
           </CustomButton>
@@ -85,6 +92,6 @@ const SignUpPage = () => {
       </SignUpContainer>
     </>
   );
-};
+}
 
 export default SignUpPage;

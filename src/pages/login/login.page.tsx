@@ -17,11 +17,7 @@ import {
 } from "./login.style";
 
 const LoginPage = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const {register, handleSubmit, formState:{errors}} = useForm()
 
   const handleSubmitPress = (data: any) => {
     console.log({ data });
@@ -47,7 +43,7 @@ const LoginPage = () => {
               hasError={!!errors?.email}
               placeholder="Digite seu e-mail"
               {...register("email", {
-                required: true })}
+                required: true})}
             />
           </LoginInputContainer>
 
@@ -71,6 +67,6 @@ const LoginPage = () => {
       </LoginContainer>
     </>
   );
-}
+};
 
 export default LoginPage;
