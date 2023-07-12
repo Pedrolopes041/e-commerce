@@ -17,12 +17,15 @@ import {
 } from "./login.style";
 
 const LoginPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const {register, handleSubmit, formState: {errors}} = useForm()
-
-  const handleSubimitPress = (data: any) => {
-    console.log({data});
-  }
+  const handleSubmitPress = (data: any) => {
+    console.log({ data });
+  };
 
   return (
     <>
@@ -43,27 +46,24 @@ const LoginPage = () => {
             <CustomInput
               hasError={!!errors?.email}
               placeholder="Digite seu e-mail"
-              {...register("email", { required: true })}
+              {...register("email", {
+                required: true })}
             />
           </LoginInputContainer>
 
           <LoginInputContainer>
             <p>Senha</p>
             <CustomInput
-              hasError={!!errors?.senha}
+              hasError={!!errors?.password}
               placeholder="Digite sua senha"
               type="password"
-              {...register("senha", { required: true })}
+              {...register("password", { required: true })}
             />
           </LoginInputContainer>
 
           <CustomButton
-            startIcon={
-              <FiLogIn
-                size={18}
-                onClick={() => handleSubmit(handleSubimitPress)()}
-              />
-            }
+            startIcon={<FiLogIn size={18} />}
+            onClick={() => handleSubmit(handleSubmitPress)()}
           >
             Entrar
           </CustomButton>
@@ -71,6 +71,6 @@ const LoginPage = () => {
       </LoginContainer>
     </>
   );
-};
+}
 
 export default LoginPage;
