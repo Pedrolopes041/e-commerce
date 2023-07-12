@@ -1,5 +1,3 @@
-import React from "react";
-
 import "./header.styles.css";
 
 import { BsCart3 } from "react-icons/bs";
