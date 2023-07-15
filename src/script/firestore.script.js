@@ -31,7 +31,7 @@ const categories = [
       },
       {
         id: "6228fcb9b7e6cb904bbe0152",
-        name: "Jaqueta Jeans Ccinza",
+        name: "Jaqueta Jeans Cinza",
         price: 250,
         imageUrl:
           "https://images.unsplash.com/photo-1601333144130-8cbb312386b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",

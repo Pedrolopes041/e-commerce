@@ -24,6 +24,7 @@ export const SignUpContent = styled.div`
   flex-direction: column;
   align-items: center;
   width: 450px;
+  height: 450px;
 `;
 
 export const SignUpInputContainer = styled.div`
