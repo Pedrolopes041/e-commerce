@@ -3,6 +3,12 @@ import CustomInput from "../../components/custom-input/custom-input";
 import Header from "../../components/header/header.component";
 import InputErrorMessage from "../../components/input-error/input-error";
 
+import { addDoc, collection } from "firebase/firestore";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import validator from "validator";
+import { useForm } from "react-hook-form";
+import { FiLogIn } from "react-icons/fi";
+
 import {
   SignUpContainer,
   SignUpContent,
@@ -10,31 +16,47 @@ import {
   SignUpInputContainer,
 } from "./sign-up.styles";
 
-import { FiLogIn } from "react-icons/fi";
 
-import { useForm } from 'react-hook-form';
-import validator from "validator";
+import { auth, db } from "../../config/firebase.config";
 
 interface SignForm {
-  name: string
-  lastName: string
-  email: string
-  password: string
-  passwordConfirmation: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
 }
 
 const SignUpPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },watch
+    formState: { errors },
+    watch,
   } = useForm<SignForm>();
 
-  const handleSubmitPress = (data: any) => {
-    console.log({ data });
+  const handleSubmitPress = async (data: SignForm) => {
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
+      console.log({ userCredentials });
+
+      await addDoc(collection(db, "users"), {
+        id: userCredentials.user.uid,
+        email: userCredentials.user.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const PasswordWatch = watch('password');
+  const PasswordWatch = watch("password");
 
   return (
     <>
@@ -47,12 +69,12 @@ const SignUpPage = () => {
           <SignUpInputContainer>
             <p>Nome</p>
             <CustomInput
-              hasError={!!errors?.name}
+              hasError={!!errors?.firstName}
               placeholder="Digite seu nome"
-              {...register("name", { required: true })}
+              {...register("firstName", { required: true })}
             />
 
-            {errors?.name?.type === "required" && (
+            {errors?.firstName?.type === "required" && (
               <InputErrorMessage>O nome é obrigatório</InputErrorMessage>
             )}
           </SignUpInputContainer>
@@ -126,8 +148,10 @@ const SignUpPage = () => {
               </InputErrorMessage>
             )}
 
-            {errors?.passwordConfirmation?.type === 'validate' && (
-              <InputErrorMessage>A confirmação de senha precisa ser igual a senha</InputErrorMessage>
+            {errors?.passwordConfirmation?.type === "validate" && (
+              <InputErrorMessage>
+                A confirmação de senha precisa ser igual a senha
+              </InputErrorMessage>
             )}
           </SignUpInputContainer>
 
@@ -141,6 +165,6 @@ const SignUpPage = () => {
       </SignUpContainer>
     </>
   );
-}
+};
 
 export default SignUpPage;
