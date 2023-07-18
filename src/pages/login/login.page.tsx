@@ -18,6 +18,10 @@ import {
   LoginSubtitle,
 } from "./login.style";
 
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config/firebase.config";
+import {AuthErrorCodes, AuthError} from "firebase/auth"
+
 interface LoginForm {
   email: string;
   password: string;
@@ -27,11 +31,31 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
-  } = useForm <LoginForm>();
+  } = useForm<LoginForm>();
 
-  const handleSubmitPress = (data: any) => {
-    console.log({ data });
+  const handleSubmitPress = async (data: LoginForm) => {
+    try {
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+      console.log({userCredentials});
+    } catch (error) {
+
+      const _errors = error as AuthError
+
+      if (_errors.code === AuthErrorCodes.INVALID_PASSWORD) {
+        return setError("password", {type: "mismatch"})
+      }
+
+      if (_errors.code === AuthErrorCodes.USER_DELETED) {
+        return setError("email", {type: "notFound"})
+      }
+      console.log(error);
+    }
   };
 
   return (
@@ -64,8 +88,12 @@ const LoginPage = () => {
               <InputErrorMessage>O e-mail é obrigatório.</InputErrorMessage>
             )}
 
-            {errors?.email?.type === 'validate' && (
+            {errors?.email?.type === "validate" && (
               <InputErrorMessage>Digite um e-mail válido</InputErrorMessage>
+            )}
+
+            {errors?.email?.type === "notFound" && (
+              <InputErrorMessage>O e-mail não foi encontrado</InputErrorMessage>
             )}
           </LoginInputContainer>
 
@@ -79,6 +107,10 @@ const LoginPage = () => {
             />
             {errors?.password?.type === "required" && (
               <InputErrorMessage>A senha é obrigatoria</InputErrorMessage>
+            )}
+
+            {errors?.password?.type === "mismatch" && (
+              <InputErrorMessage>A senha não corresponde</InputErrorMessage>
             )}
           </LoginInputContainer>
 
