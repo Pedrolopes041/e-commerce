@@ -18,9 +18,15 @@ import {
   LoginSubtitle,
 } from "./login.style";
 
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../config/firebase.config";
-import {AuthErrorCodes, AuthError} from "firebase/auth"
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
+import { Googleprovider, auth, db } from "../../config/firebase.config";
+import { AuthErrorCodes, AuthError } from "firebase/auth";
+import { get } from "http";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 interface LoginForm {
   email: string;
@@ -42,18 +48,50 @@ const LoginPage = () => {
         data.email,
         data.password
       );
-      console.log({userCredentials});
+      console.log({ userCredentials });
     } catch (error) {
-
-      const _errors = error as AuthError
+      const _errors = error as AuthError;
 
       if (_errors.code === AuthErrorCodes.INVALID_PASSWORD) {
-        return setError("password", {type: "mismatch"})
+        return setError("password", { type: "mismatch" });
       }
 
       if (_errors.code === AuthErrorCodes.USER_DELETED) {
-        return setError("email", {type: "notFound"})
+        return setError("email", { type: "notFound" });
       }
+      console.log(error);
+    }
+  };
+
+  const handleSignInWithGoogle = async () => {
+    try {
+
+      const userCredentials = await signInWithPopup(auth, Googleprovider);
+
+      const querySnapshot = await getDocs(
+        query(
+          collection(db, 'users'),
+          where('id', '==', userCredentials.user.uid)
+        )
+      )
+
+      const user = querySnapshot.docs[0]?.data()
+
+      if (!user) {
+        const firstName = userCredentials.user.displayName?.split(' ')[0]
+        const lastName = userCredentials.user.displayName?.split(" ")[1];
+
+        await addDoc(collection(db, 'users'), {
+          id: userCredentials.user.uid,
+          email: userCredentials.user.email,
+          firstName,
+          lastName,
+          provider: 'Google'
+        })
+      }
+
+    } catch (error) {
+
       console.log(error);
     }
   };
@@ -66,7 +104,10 @@ const LoginPage = () => {
         <LoginContent>
           <LoginHeadline>Entre com a sua conta</LoginHeadline>
 
-          <CustomButton startIcon={<BsGoogle size={18} />}>
+          <CustomButton
+            startIcon={<BsGoogle size={18} />}
+            onClick={handleSignInWithGoogle}
+          >
             Entrar com o Google
           </CustomButton>
 
