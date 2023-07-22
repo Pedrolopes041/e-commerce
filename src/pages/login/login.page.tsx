@@ -19,14 +19,17 @@ import {
 } from "./login.style";
 
 import {
-  GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
+
 import { Googleprovider, auth, db } from "../../config/firebase.config";
 import { AuthErrorCodes, AuthError } from "firebase/auth";
-import { get } from "http";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+
+import {useNavigate} from 'react-router-dom'
+import {useEffect, useContext} from 'react'
+import { UserContext } from "../../contexts/user.context";
 
 interface LoginForm {
   email: string;
@@ -40,6 +43,16 @@ const LoginPage = () => {
     setError,
     formState: { errors },
   } = useForm<LoginForm>();
+
+  const {isAuthenticated} = useContext(UserContext)
+
+  const navigate = useNavigate()
+
+   useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
+   }, [isAuthenticated])
 
   const handleSubmitPress = async (data: LoginForm) => {
     try {
