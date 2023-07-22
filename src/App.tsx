@@ -9,15 +9,19 @@ import SignUpPage from "./pages/sign-up/sign-up.page";
 import { auth, db} from "./config/firebase.config";
 import { UserContext } from "./contexts/user.context";
 import { collection, getDocs, query, where} from "firebase/firestore";
+import {useState} from 'react'
 
 const App: FunctionComponent = () => {
 
   const {isAuthenticated, logautUser, loginUser} = useContext(UserContext)
 
+  const [isinitializing, setIsInitializing] = useState(true)
+
   onAuthStateChanged(auth, async (user) => {
     const issSigninOut = isAuthenticated && !user;
     if (issSigninOut) {
-      return logautUser()
+      logautUser()
+      return setIsInitializing(false);
     }
 
     const issSignIn = !isAuthenticated && user;
@@ -30,9 +34,14 @@ const App: FunctionComponent = () => {
       //Esta linha define uma constante useFromFireStore que armazena os dados do primeiro documento retornado pela consulta ao banco de dados Firestore.
       const useFromFireStore = querySnapShot.docs[0]?.data();
 
-      return loginUser(useFromFireStore as any);
+      loginUser(useFromFireStore as any);
+      return setIsInitializing(false);
     }
+    return setIsInitializing(false);
   })
+
+  if (isinitializing) return null;
+
   return (
     <BrowserRouter>
       <Routes>
