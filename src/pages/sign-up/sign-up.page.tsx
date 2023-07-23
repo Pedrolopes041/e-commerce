@@ -21,7 +21,7 @@ import {
 } from "./sign-up.styles";
 
 import { auth, db } from "../../config/firebase.config";
-import {useContext, useEffect} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import { UserContext } from "../../contexts/user.context";
 import { useNavigate } from "react-router-dom";
 
@@ -36,6 +36,8 @@ interface SignForm {
 const SignUpPage = () => {
 
   const {isAuthenticated} = useContext(UserContext)
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -55,6 +57,9 @@ const SignUpPage = () => {
 
   const handleSubmitPress = async (data: SignForm) => {
     try {
+
+      setIsLoading(true)
+
       const userCredentials = await createUserWithEmailAndPassword(
         auth,
         data.email,
@@ -76,6 +81,9 @@ const SignUpPage = () => {
       if (_erros.code === AuthErrorCodes.EMAIL_EXISTS) {
         return setError("email", { type: "alreadyInUser" });
       }
+    }
+    finally{
+      setIsLoading(false);
     }
   };
 
