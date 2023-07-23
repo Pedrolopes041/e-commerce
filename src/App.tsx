@@ -11,6 +11,7 @@ import { UserContext } from "./contexts/user.context";
 import { collection, getDocs, query, where} from "firebase/firestore";
 import {useState} from 'react'
 import { UserConverter } from "./converte/firestore.converte";
+import Loading from "./components/loading/loading";
 
 const App: FunctionComponent = () => {
 
@@ -41,7 +42,7 @@ const App: FunctionComponent = () => {
     return setIsInitializing(false);
   })
 
-  if (isinitializing) return null;
+  if (isinitializing) return <Loading/>;
 
   return (
     <BrowserRouter>
