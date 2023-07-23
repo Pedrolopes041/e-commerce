@@ -2,6 +2,7 @@ import { BsGoogle } from "react-icons/bs";
 import { FiLogIn } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import validator from "validator";
+import {useState} from 'react'
 
 // Components
 import Header from "../../components/header/header.component";
@@ -30,6 +31,7 @@ import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import {useNavigate} from 'react-router-dom'
 import {useEffect, useContext} from 'react'
 import { UserContext } from "../../contexts/user.context";
+import Loading from "../../components/loading/loading";
 
 interface LoginForm {
   email: string;
@@ -46,6 +48,8 @@ const LoginPage = () => {
 
   const {isAuthenticated} = useContext(UserContext)
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const navigate = useNavigate()
 
    useEffect(() => {
@@ -56,6 +60,9 @@ const LoginPage = () => {
 
   const handleSubmitPress = async (data: LoginForm) => {
     try {
+
+      setIsLoading(true)
+
       const userCredentials = await signInWithEmailAndPassword(
         auth,
         data.email,
@@ -74,10 +81,15 @@ const LoginPage = () => {
       }
       console.log(error);
     }
+    finally {
+      setIsLoading(false)
+    }
   };
 
   const handleSignInWithGoogle = async () => {
     try {
+
+      setIsLoading(true)
 
       const userCredentials = await signInWithPopup(auth, Googleprovider);
 
@@ -107,11 +119,16 @@ const LoginPage = () => {
 
       console.log(error);
     }
+    finally{
+      setIsLoading(false)
+    }
   };
 
   return (
     <>
       <Header />
+
+      {isLoading && <Loading/>}
 
       <LoginContainer>
         <LoginContent>
