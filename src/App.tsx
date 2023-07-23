@@ -10,6 +10,7 @@ import { auth, db} from "./config/firebase.config";
 import { UserContext } from "./contexts/user.context";
 import { collection, getDocs, query, where} from "firebase/firestore";
 import {useState} from 'react'
+import { UserConverter } from "./converte/firestore.converte";
 
 const App: FunctionComponent = () => {
 
@@ -28,13 +29,13 @@ const App: FunctionComponent = () => {
     if(issSignIn) {
       const querySnapShot = await getDocs(
         //Esta linha define a consulta ao banco de dados Firestore para obter documentos da coleção ‘users’ onde o campo ‘id’ é igual ao UID do usuário atual.
-        query(collection(db, "users"), where("id", "==", user.uid))
+        query(collection(db, "users").withConverter(UserConverter), where("id", "==", user.uid))
       );
 
       //Esta linha define uma constante useFromFireStore que armazena os dados do primeiro documento retornado pela consulta ao banco de dados Firestore.
       const useFromFireStore = querySnapShot.docs[0]?.data();
 
-      loginUser(useFromFireStore as any);
+      loginUser(useFromFireStore);
       return setIsInitializing(false);
     }
     return setIsInitializing(false);
