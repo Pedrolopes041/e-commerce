@@ -24,6 +24,7 @@ import { auth, db } from "../../config/firebase.config";
 import {useContext, useEffect, useState} from 'react'
 import { UserContext } from "../../contexts/user.context";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../components/loading/loading";
 
 interface SignForm {
   firstName: string;
@@ -92,6 +93,8 @@ const SignUpPage = () => {
   return (
     <>
       <Header />
+
+      {isLoading && <Loading/>}
 
       <SignUpContainer>
         <SignUpContent>
