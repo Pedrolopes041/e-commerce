@@ -12,6 +12,7 @@ import { collection, getDocs, query, where} from "firebase/firestore";
 import {useState} from 'react'
 import { UserConverter } from "./converte/firestore.converte";
 import Loading from "./components/loading/loading";
+import ExplorePage from "./pages/explore/explore";
 
 const App: FunctionComponent = () => {
 
@@ -50,6 +51,7 @@ const App: FunctionComponent = () => {
         <Route path="/" element={<HomePage />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/sign" element={<SignUpPage />} />
+        <Route path="/explore" element={<ExplorePage/>} />
       </Routes>
     </BrowserRouter>
   );
