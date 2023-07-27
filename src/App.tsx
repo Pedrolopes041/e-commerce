@@ -14,6 +14,7 @@ import { UserContext } from "./contexts/user.context";
 import { collection, getDocs, query, where} from "firebase/firestore";
 import {useState} from 'react'
 import { UserConverter } from "./converte/firestore.converte";
+import Cart from "./components/cart/cart-component";
 
 
 
@@ -57,6 +58,8 @@ const App: FunctionComponent = () => {
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/category/:id" element={<CategoryDetailsPage />} />
       </Routes>
+
+      <Cart/>
     </BrowserRouter>
   );
 };
