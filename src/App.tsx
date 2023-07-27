@@ -5,14 +5,17 @@ import {FunctionComponent, useContext} from 'react'
 import HomePage from "./pages/home/home.page";
 import Login from "./pages/login/login.page";
 import SignUpPage from "./pages/sign-up/sign-up.page";
+import ExplorePage from "./pages/explore/explore";
+import Loading from "./components/loading/loading";
+import CategoryDetailsPage from "./pages/category-details/category-details.page";
 
 import { auth, db} from "./config/firebase.config";
 import { UserContext } from "./contexts/user.context";
 import { collection, getDocs, query, where} from "firebase/firestore";
 import {useState} from 'react'
 import { UserConverter } from "./converte/firestore.converte";
-import Loading from "./components/loading/loading";
-import ExplorePage from "./pages/explore/explore";
+
+
 
 const App: FunctionComponent = () => {
 
@@ -51,7 +54,8 @@ const App: FunctionComponent = () => {
         <Route path="/" element={<HomePage />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/sign" element={<SignUpPage />} />
-        <Route path="/explore" element={<ExplorePage/>} />
+        <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/category/:id" element={<CategoryDetailsPage />} />
       </Routes>
     </BrowserRouter>
   );
