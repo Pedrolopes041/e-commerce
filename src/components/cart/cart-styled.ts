@@ -31,7 +31,7 @@ export const CartEscapeArea = styled.div`
 
 export const CartContent = styled.div`
   height: 100%;
-  min-width: 500px;
+  min-width: 400px;
   z-index: 200;
   background-color: white;
   padding: 20px;
