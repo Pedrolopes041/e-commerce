@@ -13,14 +13,16 @@ interface ICartContext {
   isVisible: boolean;
   products: Cart[];
   toggleCart: () => void;
-  addProductToCart: (product: Product) => void
+  addProductToCart: (product: Product) => void;
+  removeProductFromCart: (productId: string) => void;
 }
 // add as informações ao nosso context
 export const CartContext = createContext<ICartContext>({
   isVisible: false,
   products: [],
   toggleCart: () => {},
-  addProductToCart: () => {}
+  addProductToCart: () => {},
+  removeProductFromCart: () => {},
 });
 //criando o provider
 const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
@@ -30,28 +32,46 @@ const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   const [products, setProducts] = useState<Cart[]>([]);
 
   const toggleCart = () => {
-    //ta pegando o state anterior que é false 
+    //ta pegando o state anterior que é false
     setIsVisible((prevState) => !prevState);
   };
 
   const addProductToCart = (product: Product) => {
-    // verifica se o produto ja esta no carrinho 
+    // verifica se o produto ja esta no carrinho
     const productIsAlreadyInCart = products.some(
       (item) => item.id === product.id
-    )
+    );
     //se sim -> aumenta sua quantidade
     if (productIsAlreadyInCart) {
-      return setProducts((products) => products.map((item) => item.id === product.id ? {...item, quanty: item.quanty + 1}: item
-      ))
+      return setProducts((products) =>
+        products.map((item) =>
+          item.id === product.id ? { ...item, quanty: item.quanty + 1 } : item
+        )
+      );
     }
 
     //senão -> adciona o produto
-    setProducts((prevState) => [...prevState, {...product, quanty: 1}]);
-  }
+    setProducts((prevState) => [...prevState, { ...product, quanty: 1 }]);
+  };
+
+  // Define uma função chamada `removeProductFromCart` que recebe um parâmetro chamado `productId` do tipo `string`.
+  const removeProductFromCart = (productId: string) => {
+    // Chama a função `setProducts` para atualizar o estado de `products`.
+    setProducts((products) =>
+      // Filtra a lista de produtos para manter apenas aqueles cujo ID é diferente do valor passado para `productId`.
+      products.filter((product) => product.id !== productId)
+    );
+  };
 
   return (
     <CartContext.Provider
-      value={{ isVisible, products, toggleCart, addProductToCart }}
+      value={{
+        isVisible,
+        products,
+        toggleCart,
+        addProductToCart,
+        removeProductFromCart,
+      }}
     >
       {children}
     </CartContext.Provider>
