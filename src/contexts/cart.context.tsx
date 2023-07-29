@@ -2,6 +2,7 @@ import {
   FunctionComponent,
   PropsWithChildren,
   createContext,
+  useMemo,
   useState,
 } from "react";
 
@@ -12,6 +13,7 @@ import Product from "../types/product.types";
 interface ICartContext {
   isVisible: boolean;
   products: Cart[];
+  productTotalPrice: number
   toggleCart: () => void;
   addProductToCart: (product: Product) => void;
   removeProductFromCart: (productId: string) => void;
@@ -22,6 +24,7 @@ interface ICartContext {
 export const CartContext = createContext<ICartContext>({
   isVisible: false,
   products: [],
+  productTotalPrice: 0,
   toggleCart: () => {},
   addProductToCart: () => {},
   removeProductFromCart: () => {},
@@ -88,11 +91,18 @@ const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
     );
   }
 
+  const productTotalPrice = useMemo(() => {
+    return products.reduce((acc, currentProduct) => {
+      return acc + currentProduct.price * currentProduct.quanty
+    }, 0)
+  }, [products])
+
   return (
     <CartContext.Provider
       value={{
         isVisible,
         products,
+        productTotalPrice,
         toggleCart,
         addProductToCart,
         removeProductFromCart,
