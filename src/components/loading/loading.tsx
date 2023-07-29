@@ -1,14 +1,14 @@
 import React from "react";
 import { FunctionComponent } from "react";
 import {LoadingContainer} from './loading.styled'
-import SyncLoader from "react-spinners/SyncLoader";
+import BarLoader from "react-spinners/BarLoader";
 
  
 const Loading: FunctionComponent = () => {
     return (
-        <LoadingContainer>
-            <SyncLoader size={32}/>
-        </LoadingContainer>
+      <LoadingContainer>
+        <BarLoader width={80} color="#212529" />
+      </LoadingContainer>
     );
 }
  
