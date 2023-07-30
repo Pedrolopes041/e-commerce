@@ -2,12 +2,14 @@ import {
   FunctionComponent,
   PropsWithChildren,
   createContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
 
 import Cart from "../types/cart.types";
 import Product from "../types/product.types";
+import { json } from "stream/consumers";
 
 // o que vai ter na nossa aplicação ?
 interface ICartContext {
@@ -39,6 +41,19 @@ const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [products, setProducts] = useState<Cart[]>([]);
+
+  useEffect(() => {
+    const productsFromLocalStorage = JSON.parse(
+      localStorage.getItem("cartProducts")!
+    );
+
+    setProducts(productsFromLocalStorage);
+
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('cartProducts', JSON.stringify(products))
+  }, [products])
 
   const toggleCart = () => {
     //ta pegando o state anterior que é false

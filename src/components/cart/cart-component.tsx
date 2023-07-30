@@ -10,7 +10,7 @@ import {
 } from "./cart-styled";
 
 import { FunctionComponent, useContext } from "react";
-import { BsCartCheck } from "react-icons/bs";
+import { BsCartCheck, BsFillHandbagFill } from "react-icons/bs";
 
 const Cart: FunctionComponent = () => {
   const { isVisible, toggleCart, products, productTotalPrice, productsCount } =
@@ -36,7 +36,7 @@ const Cart: FunctionComponent = () => {
         )}
 
         {productsCount === 0 && (
-            <p>Seu Carrinho está vazio</p>
+            <p><BsFillHandbagFill/> Seu Carrinho está vazio</p>
         )}
 
       </CartContent>
