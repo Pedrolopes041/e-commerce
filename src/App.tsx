@@ -15,6 +15,7 @@ import { collection, getDocs, query, where} from "firebase/firestore";
 import {useState} from 'react'
 import { UserConverter } from "./converte/firestore.converte";
 import Cart from "./components/cart/cart-component";
+import CheckoutPage from "./pages/checkout-page/checkout.pag";
 
 
 
@@ -57,6 +58,7 @@ const App: FunctionComponent = () => {
         <Route path="/sign" element={<SignUpPage />} />
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/category/:id" element={<CategoryDetailsPage />} />
+        <Route path="/checkout" element={<CheckoutPage/>}/>
       </Routes>
 
       <Cart/>
