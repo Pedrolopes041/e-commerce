@@ -43,7 +43,7 @@ const CartItem: FunctionComponent<CartItemProps> = ({ product }) => {
 
         <CartItemQuantity>
           <AiOutlineMinus size={20} onClick={handledecreaseClick} />
-          <p>{product.quanty}</p>
+          <p>{product.quantity}</p>
           <AiOutlinePlus size={20} onClick={handleIncreaseClick} />
         </CartItemQuantity>
       </CartItemInfo>

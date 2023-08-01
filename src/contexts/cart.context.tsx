@@ -69,13 +69,15 @@ const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
     if (productIsAlreadyInCart) {
       return setProducts((products) =>
         products.map((item) =>
-          item.id === product.id ? { ...item, quanty: item.quanty + 1 } : item
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
         )
       );
     }
 
     //senão -> adciona o produto
-    setProducts((prevState) => [...prevState, { ...product, quanty: 1 }]);
+    setProducts((prevState) => [...prevState, { ...product, quantity: 1 }]);
   };
 
   // Define uma função chamada `removeProductFromCart` que recebe um parâmetro chamado `productId` do tipo `string`.
@@ -91,7 +93,7 @@ const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
     setProducts((products) =>
       products.map((product) =>
         product.id === productId
-          ? { ...product, quanty: product.quanty + 1 }
+          ? { ...product, quantity: product.quantity + 1 }
           : product
       )
     );
@@ -99,24 +101,25 @@ const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
 
   const decreaseProductQuantity = (productId: string) => {
     setProducts((products) =>
-      products.map((product) =>
-        product.id === productId
-          ? { ...product, quanty: product.quanty - 1 }
-          : product
-      )
-      .filter((product) => product.quanty > 0)
+      products
+        .map((product) =>
+          product.id === productId
+            ? { ...product, quantity: product.quantity - 1 }
+            : product
+        )
+        .filter((product) => product.quantity > 0)
     );
   }
 
   const productTotalPrice = useMemo(() => {
     return products.reduce((acc, currentProduct) => {
-      return acc + currentProduct.price * currentProduct.quanty
+      return acc + currentProduct.price * currentProduct.quantity;
     }, 0)
   }, [products])
 
   const productsCount = useMemo(() => {
     return products.reduce((acc, currentProduct) => {
-      return acc + currentProduct.quanty
+      return acc + currentProduct.quantity;
     },0);
   }, [products])
 
