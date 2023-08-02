@@ -9,14 +9,13 @@ import {
 
 import Cart from "../types/cart.types";
 import Product from "../types/product.types";
-import { json } from "stream/consumers";
 
 // o que vai ter na nossa aplicação ?
 interface ICartContext {
   isVisible: boolean;
   products: Cart[];
-  productTotalPrice: number
-  productsCount: number 
+  productTotalPrice: number;
+  productsCount: number;
   toggleCart: () => void;
   addProductToCart: (product: Product) => void;
   removeProductFromCart: (productId: string) => void;
@@ -33,27 +32,28 @@ export const CartContext = createContext<ICartContext>({
   addProductToCart: () => {},
   removeProductFromCart: () => {},
   increaseProductQuantity: () => {},
-  decreaseProductQuantity: () => {}
+  decreaseProductQuantity: () => {},
 });
 //criando o provider
 const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   children,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [products, setProducts] = useState<Cart[]>([]);
+  // Cria uma variável de estado chamada `products` e uma função para atualizá-la chamada `setProducts` usando o Hook `useState` do React.
+  const [products, setProducts] = useState<Cart[]>(() => {
+    // Tenta recuperar um item chamado `"cartProducts"` do armazenamento local do navegador.
+    const productsFromLocalStorage = localStorage.getItem("cartProducts");
+
+    // Verifica se o item `"cartProducts"` não existe no armazenamento local (ou seja, se `productsFromLocalStorage` é `null`).
+    if (!productsFromLocalStorage) return [];
+
+    // Se o item `"cartProducts"` existir no armazenamento local, converte a string JSON armazenada em um objeto JavaScript usando `JSON.parse` e retorna esse objeto como o valor inicial de `products`.
+    return JSON.parse(productsFromLocalStorage);
+  });
 
   useEffect(() => {
-    const productsFromLocalStorage = JSON.parse(
-      localStorage.getItem("cartProducts")!
-    );
-
-    setProducts(productsFromLocalStorage);
-
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem('cartProducts', JSON.stringify(products))
-  }, [products])
+    localStorage.setItem("cartProducts", JSON.stringify(products));
+  }, [products]);
 
   const toggleCart = () => {
     //ta pegando o state anterior que é false
@@ -109,19 +109,19 @@ const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
         )
         .filter((product) => product.quantity > 0)
     );
-  }
+  };
 
   const productTotalPrice = useMemo(() => {
     return products.reduce((acc, currentProduct) => {
       return acc + currentProduct.price * currentProduct.quantity;
-    }, 0)
-  }, [products])
+    }, 0);
+  }, [products]);
 
   const productsCount = useMemo(() => {
     return products.reduce((acc, currentProduct) => {
       return acc + currentProduct.quantity;
-    },0);
-  }, [products])
+    }, 0);
+  }, [products]);
 
   return (
     <CartContext.Provider
