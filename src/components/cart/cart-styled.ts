@@ -38,7 +38,7 @@ export const CartContent = styled.div`
   overflow-y: scroll;
 
   @media (max-width: 768px) {
-    min-width: 60%;
+    min-width: 80%;
   }
 `;
 export const CartTitle = styled.p`
