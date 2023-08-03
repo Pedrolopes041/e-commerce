@@ -66,6 +66,6 @@ export const CheckoutTotal = styled.p`
   margin-bottom: 15px;
 
   @media (max-width: 768px) {
-    width: 90%;
+    width: 100%;
   }
 `;
