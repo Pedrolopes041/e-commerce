@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-import {FunctionComponent, useContext} from 'react'
+import { FunctionComponent, useContext } from "react";
 
 import HomePage from "./pages/home/home.page";
 import Login from "./pages/login/login.page";
@@ -9,35 +9,36 @@ import ExplorePage from "./pages/explore/explore";
 import Loading from "./components/loading/loading";
 import CategoryDetailsPage from "./pages/category-details/category-details.page";
 
-import { auth, db} from "./config/firebase.config";
+import { auth, db } from "./config/firebase.config";
 import { UserContext } from "./contexts/user.context";
-import { collection, getDocs, query, where} from "firebase/firestore";
-import {useState} from 'react'
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useState } from "react";
 import { UserConverter } from "./converte/firestore.converte";
 import Cart from "./components/cart/cart-component";
 import CheckoutPage from "./pages/checkout-page/checkout.pag";
 import Authentication from "./components/authentication/authentication.component";
-
-
+import PaymentConfirmationPage from "./pages/payment-confimation/payment.confirmation.page";
 
 const App: FunctionComponent = () => {
+  const { isAuthenticated, logautUser, loginUser } = useContext(UserContext);
 
-  const {isAuthenticated, logautUser, loginUser} = useContext(UserContext)
-
-  const [isinitializing, setIsInitializing] = useState(true)
+  const [isinitializing, setIsInitializing] = useState(true);
 
   onAuthStateChanged(auth, async (user) => {
     const issSigninOut = isAuthenticated && !user;
     if (issSigninOut) {
-      logautUser()
+      logautUser();
       return setIsInitializing(false);
     }
 
     const issSignIn = !isAuthenticated && user;
-    if(issSignIn) {
+    if (issSignIn) {
       const querySnapShot = await getDocs(
         //Esta linha define a consulta ao banco de dados Firestore para obter documentos da coleção ‘users’ onde o campo ‘id’ é igual ao UID do usuário atual.
-        query(collection(db, "users").withConverter(UserConverter), where("id", "==", user.uid))
+        query(
+          collection(db, "users").withConverter(UserConverter),
+          where("id", "==", user.uid)
+        )
       );
 
       //Esta linha define uma constante useFromFireStore que armazena os dados do primeiro documento retornado pela consulta ao banco de dados Firestore.
@@ -47,9 +48,9 @@ const App: FunctionComponent = () => {
       return setIsInitializing(false);
     }
     return setIsInitializing(false);
-  })
+  });
 
-  if (isinitializing) return <Loading/>;
+  if (isinitializing) return <Loading />;
 
   return (
     <BrowserRouter>
@@ -59,15 +60,22 @@ const App: FunctionComponent = () => {
         <Route path="/sign" element={<SignUpPage />} />
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/category/:id" element={<CategoryDetailsPage />} />
+        <Route
+          path="/payment-confirmation"
+          element={<PaymentConfirmationPage />}
+        />
 
-        <Route path="/checkout" element={
-          <Authentication>
-            <CheckoutPage/>
-          </Authentication>
-        }/>
+        <Route
+          path="/checkout"
+          element={
+            <Authentication>
+              <CheckoutPage />
+            </Authentication>
+          }
+        />
       </Routes>
 
-      <Cart/>
+      <Cart />
     </BrowserRouter>
   );
 };

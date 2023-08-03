@@ -21,6 +21,7 @@ interface ICartContext {
   removeProductFromCart: (productId: string) => void;
   increaseProductQuantity: (productId: string) => void;
   decreaseProductQuantity: (productId: string) => void;
+  clearCart: () => void;
 }
 // add as informações ao nosso context
 export const CartContext = createContext<ICartContext>({
@@ -33,12 +34,14 @@ export const CartContext = createContext<ICartContext>({
   removeProductFromCart: () => {},
   increaseProductQuantity: () => {},
   decreaseProductQuantity: () => {},
+  clearCart: () => {},
 });
 //criando o provider
 const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
   children,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+
   // Cria uma variável de estado chamada `products` e uma função para atualizá-la chamada `setProducts` usando o Hook `useState` do React.
   const [products, setProducts] = useState<Cart[]>(() => {
     // Tenta recuperar um item chamado `"cartProducts"` do armazenamento local do navegador.
@@ -111,6 +114,10 @@ const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
     );
   };
 
+  const clearCart = () => {
+    setProducts([])
+  }
+
   const productTotalPrice = useMemo(() => {
     return products.reduce((acc, currentProduct) => {
       return acc + currentProduct.price * currentProduct.quantity;
@@ -135,6 +142,7 @@ const CartContextProvider: FunctionComponent<PropsWithChildren<{}>> = ({
         removeProductFromCart,
         increaseProductQuantity,
         decreaseProductQuantity,
+        clearCart,
       }}
     >
       {children}
