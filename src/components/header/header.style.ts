@@ -13,17 +13,33 @@ export const HeaderContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 export const HeaderTitle = styled.h2`
   font-weight: bold;
   font-size: 1rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 16px;
+  }
 `;
 
 export const HeaderItems = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 768) {
+    display: flex;
+    justify-content: space-evenly;
+  }
 `;
 
 export const HeaderItem = styled.div`
@@ -36,5 +52,9 @@ export const HeaderItem = styled.div`
   &:nth-child(2),
   &:nth-child(3) {
     margin-right: 40px;
+  }
+
+  @media (max-width: 768) {
+    margin-right: 0;
   }
 `;
