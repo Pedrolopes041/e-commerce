@@ -25,6 +25,10 @@ export const SignUpContent = styled.div`
   align-items: center;
   width: 450px;
   height: 450px;
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 `;
 
 export const SignUpInputContainer = styled.div`
