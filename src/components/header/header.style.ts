@@ -35,11 +35,6 @@ export const HeaderItems = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  @media (max-width: 768) {
-    display: flex;
-    justify-content: space-evenly;
-  }
 `;
 
 export const HeaderItem = styled.div`
@@ -54,7 +49,4 @@ export const HeaderItem = styled.div`
     margin-right: 40px;
   }
 
-  @media (max-width: 768) {
-    margin-right: 0;
-  }
 `;
